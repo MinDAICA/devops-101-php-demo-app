@@ -21,6 +21,9 @@ jobs:
                   extensions: "intl, mbstring, pdo_sqlite, zip"
                   php-version: "8.2"
                   tools: composer:v2
+            
+            - name: "Create .env file"
+              run: cp -rf .env.example .env
 
             - name: "Add PHPUnit matcher"
               run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
