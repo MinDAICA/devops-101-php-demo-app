@@ -36,13 +36,13 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER_IP << 'EOF'
             cd /app
-            docker run --rm --interactive --tty   --volume /app:/app composer install --ansi --no-interaction --no-progress
+            docker run --rm --volume /app:/app composer install --ansi --no-interaction --no-progress
           EOF
       
       - name: "Build and compile assets"
         run: |
           ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER_IP << 'EOF'
-            docker exec my-php-demo-app php bin/console importmap:install
-            docker exec my-php-demo-app php bin/console sass:build
-            docker exec my-php-demo-app php bin/console asset-map:compile
+            docker exec my-php-demo-app php /var/www/html/bin/console importmap:install
+            docker exec my-php-demo-app php /var/www/html/bin/console sass:build
+            docker exec my-php-demo-app php /var/www/html/bin/console asset-map:compile
           EOF
