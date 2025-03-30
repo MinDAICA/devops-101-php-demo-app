@@ -31,3 +31,12 @@ jobs:
             cd /app
             git pull origin main
           EOF
+          
+      - name: "Install dependencies"
+        run: composer install --ansi --no-interaction --no-progress
+
+      - name: "Build and compile assets"
+        run: |
+          docker exec my-php-demo-app php bin/console importmap:install
+          docker exec my-php-demo-app php bin/console sass:build
+          docker exec my-php-demo-app php bin/console asset-map:compile

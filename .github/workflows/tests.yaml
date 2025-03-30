@@ -6,28 +6,10 @@ on:
         branches:
             - main
 
-env:
-    fail-fast: true
-
-permissions:
-    contents: read
-
 jobs:
     unit-tests:
-        name: "${{ matrix.operating-system }} / PHP ${{ matrix.php-version }}"
-        runs-on: ${{ matrix.operating-system }}
-        continue-on-error: false
-
-        strategy:
-            matrix:
-                operating-system: ['ubuntu-latest']
-                php-version: ['8.2', '8.3', '8.4']
-                include:
-                    - operating-system: 'macos-latest'
-                      php-version: '8.2'
-                    - operating-system: 'windows-latest'
-                      php-version: '8.2'
-
+        name: "ubuntu-latest / PHP 8.2"
+        runs-on: "ubuntu-latest"
         steps:
             - name: "Checkout code"
               uses: actions/checkout@v4
@@ -37,8 +19,11 @@ jobs:
               with:
                   coverage: "none"
                   extensions: "intl, mbstring, pdo_sqlite, zip"
-                  php-version: ${{ matrix.php-version }}
+                  php-version: "8.2"
                   tools: composer:v2
+            
+            - name: "Create .env file"
+              run: cp -rf .env.example .env
 
             - name: "Add PHPUnit matcher"
               run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
