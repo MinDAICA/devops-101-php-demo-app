@@ -31,12 +31,18 @@ jobs:
             cd /app
             git pull origin main
           EOF
-          
-      - name: "Install dependencies"
-        run: composer install --ansi --no-interaction --no-progress
 
+      - name: "Install dependencies"
+        run: |
+          ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER_IP << 'EOF'
+            cd /app
+            docker run --rm --interactive --tty   --volume /app:/app composer install --ansi --no-interaction --no-progress
+          EOF
+      
       - name: "Build and compile assets"
         run: |
-          docker exec my-php-demo-app php bin/console importmap:install
-          docker exec my-php-demo-app php bin/console sass:build
-          docker exec my-php-demo-app php bin/console asset-map:compile
+          ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER_IP << 'EOF'
+            docker exec my-php-demo-app php bin/console importmap:install
+            docker exec my-php-demo-app php bin/console sass:build
+            docker exec my-php-demo-app php bin/console asset-map:compile
+          EOF
