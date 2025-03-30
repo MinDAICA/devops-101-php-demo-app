@@ -86,3 +86,26 @@ cd my_project/
 [4]: https://symfony.com/download
 [5]: https://symfony.com/book
 [6]: https://getcomposer.org/
+
+
+Deployment
+-----
+Generate RSA key pair
+
+```bash
+ssh-keygen -t RSA -b 4096 -f /tmp/deploy_key
+```
+
+Add public key to server
+
+```bash
+cat /tmp/deploy_key.pub
+# Copy content to server at ~/.ssh/authorized_keys
+```
+
+Add private key to secrets on GitHub repo
+
+```bash
+cat /tmp/deploy_key
+# navigate to the repository's "Settings", select "Secrets and variables", then "Actions", and create a new repository secret, pasting the key's value
+```
